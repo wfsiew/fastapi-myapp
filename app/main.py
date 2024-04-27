@@ -12,6 +12,8 @@ from app.models import Patient
 from app.services.vesalius_geo import VesaliusGeoService
 from app import utils
 
+import websocket, json
+
 logger = utils.getLogger('main')
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -119,6 +121,87 @@ async def get_current_active_user(
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+@app.get('/getalllog')
+async def getalllog():
+    ws = websocket.WebSocket()
+    ws.connect("ws://192.168.5.164:7788")
+    m = {
+        'cmd': 'getalllog',
+        'stn': True,
+        'deviceSn': 'ZXRL12098608'
+    }
+    ws.send(json.dumps(m))
+    ws.close()
+    return {
+        'code': 100,
+        'msg': 'success'
+    }
+
+@app.get('/getnewlog')
+async def getnewlog():
+    ws = websocket.WebSocket()
+    ws.connect("ws://192.168.5.164:7788")
+    m = {
+        'cmd': 'getnewlog',
+        'stn': True,
+        'deviceSn': 'ZXRL12098608'
+    }
+    ws.send(json.dumps(m))
+    ws.close()
+    return {
+        'code': 100,
+        'msg': 'success'
+    }
+
+@app.get('/getuserinfo')
+async def getuserinfo(enrollid: int, backupnum: int):
+    ws = websocket.WebSocket()
+    ws.connect("ws://192.168.5.164:7788")
+    m = {
+        'cmd': 'getuserinfo',
+        'enrollid': enrollid,
+        'backupnum': backupnum,
+        'deviceSn': 'ZXRL12098608'
+    }
+    ws.send(json.dumps(m))
+    ws.close()
+    return {
+        'code': 100,
+        'msg': 'success'
+    }
+
+@app.get('/getuserlist')
+async def getuserlist():
+    ws = websocket.WebSocket()
+    ws.connect("ws://192.168.5.164:7788")
+    m = {
+        'cmd': 'getuserlist',
+        'stn': True,
+        'deviceSn': 'ZXRL12098608'
+    }
+    ws.send(json.dumps(m))
+    ws.close()
+    return {
+        'code': 100,
+        'msg': 'success'
+    }
+
+@app.get('/getalllog')
+async def getalllog():
+    ws = websocket.WebSocket()
+    ws.connect("ws://192.168.5.164:7788")
+    m = {
+        'cmd': 'getalllog',
+        'stn': True,
+        'deviceSn': 'ZXRL12098608'
+    }
+    ws.send(json.dumps(m))
+    ws.close()
+    return {
+        'code': 100,
+        'msg': 'success'
+    }
 
 @app.post('/car')
 def createCar(car: Car):
